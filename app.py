@@ -25,5 +25,15 @@ def create_store():
     stores.append(new_store)
     return new_store, 201
 
+@app.post("/store/<string:name>/item")
+def add_items(name):
+    for store in stores:
+        if store["name"] == name:
+            request_data = request.get_json()
+            new_item = {"name": request_data["name"], "price": request_data["price"]}
+            store["items"].append(new_item)
+            return new_item, 201
+    return {"message": "store not found"}, 404
+
 if __name__ == '__main__':
     app.run(debug=True)
